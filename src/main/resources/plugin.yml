@@ -1,0 +1,6 @@
+name: SmokeBomb
+version: '${project.version}'
+main: nl.rubixstudios.smokebomb.Bomb
+authors: [ Tokeee ]
+depend:
+  - ProtocolLib
