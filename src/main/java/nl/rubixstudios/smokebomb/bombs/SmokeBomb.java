@@ -7,6 +7,7 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Item;
@@ -24,6 +25,8 @@ import java.util.Set;
 public class SmokeBomb extends Bomb{
     public SmokeBomb(Player thrower, Item bomb) {
         super(thrower, bomb);
+
+        setParticleEffect(Effect.LARGE_SMOKE);
     }
 
     @Override
@@ -83,6 +86,14 @@ public class SmokeBomb extends Bomb{
 
     @Override
     public boolean isAffected(Player player) {
-        return player.hasPotionEffect(PotionEffectType.INVISIBILITY) && player.hasMetadata("smokebomb");
+        return player.hasMetadata("smokebomb");
+    }
+
+    @Override
+    public boolean mustBeAffected(Player player) {
+        // check for lazarus api
+        final boolean isInTheSameFaction = false;
+
+        return !isInTheSameFaction;
     }
 }

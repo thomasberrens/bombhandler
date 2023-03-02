@@ -45,6 +45,7 @@ public abstract class Bomb {
     public abstract void removeEffect(Player player);
 
     public abstract boolean isAffected(final Player player);
+    public abstract boolean mustBeAffected(final Player player);
 
 
     public boolean isExpired() {

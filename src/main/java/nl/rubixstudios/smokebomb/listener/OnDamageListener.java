@@ -5,7 +5,9 @@ import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityEquipment;
 import nl.rubixstudios.smokebomb.Bomb;
 import nl.rubixstudios.smokebomb.BombManager;
+import nl.rubixstudios.smokebomb.util.ParticleUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +22,10 @@ import java.util.Set;
 
 public class OnDamageListener implements Listener {
 
+    // this has to be a config value
+    private final float DAMAGE_MULTIPLIER = 1.2f;
+
+
     @EventHandler (priority = EventPriority.HIGHEST)
     private void onDamage(EntityDamageEvent event) {
         if (event.isCancelled()) return;
@@ -28,6 +34,15 @@ public class OnDamageListener implements Listener {
 
         Player player = (Player) event.getEntity();
 
+        if (player.hasMetadata("bleedbomb")) {
+
+            Bukkit.broadcastMessage("Multiplying");
+
+            event.setDamage(event.getDamage() * DAMAGE_MULTIPLIER);
+
+            ParticleUtil.runColoredParticlesCubeAtPlayer(player, 4, 255, 0,0, Effect.COLOURED_DUST);
+
+        }
     }
 
     @EventHandler
@@ -40,13 +55,6 @@ public class OnDamageListener implements Listener {
             updateArmor(player, true);
             event.setCancelled(true);
         }
-    }
-
-    @EventHandler
-    private void onEquip(EquipmentSetEvent event) {
-       if(event.getHumanEntity().hasMetadata("smokebomb")) {
-              updateArmor((Player) event.getHumanEntity(), true);
-       }
     }
 
     public void updateArmor(Player player, boolean remove) {

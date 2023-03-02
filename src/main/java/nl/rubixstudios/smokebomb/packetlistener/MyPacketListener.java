@@ -25,18 +25,16 @@ public class MyPacketListener {
 
             @Override
             public void onPacketSending(PacketEvent event) {
-                Bukkit.broadcastMessage("Sending: " + event.getPacketType());
-
-               Bukkit.broadcastMessage("TARGET: " + event.getPacket().getModifier().getTarget());
-
-
-                event.getPacket().
-
-                if (event.getPlayer().hasMetadata("smokebomb")) {
-                    Bukkit.broadcastMessage("Player: " + event.getPlayer().getName());
-
-                    event.getPlayer().removeMetadata("smokebomb", Bomb.getInstance());
-                }
+//                Bukkit.broadcastMessage("Sending: " + event.getPacketType());
+//
+//               Bukkit.broadcastMessage("TARGET: " + event.getPacket().getModifier().getTarget());
+//
+//
+//                if (event.getPlayer().hasMetadata("smokebomb")) {
+//                    Bukkit.broadcastMessage("Player: " + event.getPlayer().getName());
+//
+//                    event.getPlayer().removeMetadata("smokebomb", Bomb.getInstance());
+//                }
             }
         };
     }

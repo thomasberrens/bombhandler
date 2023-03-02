@@ -3,6 +3,8 @@ package nl.rubixstudios.smokebomb;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketListener;
 import lombok.Getter;
+import nl.rubixstudios.smokebomb.bombs.BleedBomb;
+import nl.rubixstudios.smokebomb.bombs.FlashBang;
 import nl.rubixstudios.smokebomb.bombs.SmokeBomb;
 import nl.rubixstudios.smokebomb.listener.OnDamageListener;
 import nl.rubixstudios.smokebomb.packetlistener.MyPacketListener;
@@ -50,21 +52,55 @@ public final class Bomb extends JavaPlugin implements Listener {
     private void onRightClick(PlayerInteractEvent event) {
 
         // check if player is holding a smoke bomb
-        if (!event.getItem().getType().equals(Material.FIREBALL)) return;
+        if (event.getItem().getType().equals(Material.FIREBALL)) {
 
 
             // remove smoke bomb from inventory
             event.getItem().setAmount(event.getItem().getAmount() - 1);
 
             // spawn smoke bomb
-             final Item bomb = event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getEyeLocation(), event.getItem());
+            final Item bomb = event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getEyeLocation(), event.getItem());
 
-             final Vector vector = event.getPlayer().getLocation().getDirection(); // Give an direction for shooting the fireball.
+            final Vector vector = event.getPlayer().getLocation().getDirection(); // Give an direction for shooting the fireball.
             bomb.setVelocity(vector);
 
             event.getPlayer().updateInventory();
             event.setCancelled(true);
             BombManager.getInstance().addBomb(new SmokeBomb(event.getPlayer(), bomb));
+
+        }
+
+        if (event.getItem().getType().equals(Material.BLAZE_ROD)) {
+            // remove smoke bomb from inventory
+            event.getItem().setAmount(event.getItem().getAmount() - 1);
+
+            // spawn smoke bomb
+            final Item bomb = event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getEyeLocation(), event.getItem());
+
+            final Vector vector = event.getPlayer().getLocation().getDirection(); // Give an direction for shooting the fireball.
+            bomb.setVelocity(vector);
+
+            event.getPlayer().updateInventory();
+            event.setCancelled(true);
+            BombManager.getInstance().addBomb(new BleedBomb(event.getPlayer(), bomb));
+        }
+
+        if (event.getItem().getType().equals(Material.FIREWORK)) {
+            // remove smoke bomb from inventory
+            event.getItem().setAmount(event.getItem().getAmount() - 1);
+
+            final ItemStack cloned = event.getItem().clone();
+            cloned.setAmount(1);
+            // spawn smoke bomb
+            final Item bomb = event.getPlayer().getWorld().dropItemNaturally(event.getPlayer().getEyeLocation(), cloned);
+
+            final Vector vector = event.getPlayer().getLocation().getDirection(); // Give an direction for shooting the fireball.
+            bomb.setVelocity(vector);
+
+            event.getPlayer().updateInventory();
+            event.setCancelled(true);
+            BombManager.getInstance().addBomb(new FlashBang(event.getPlayer(), bomb));
+        }
 
 
     }
