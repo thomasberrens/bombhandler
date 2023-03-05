@@ -3,14 +3,14 @@ package nl.rubixstudios.smokebomb.bombs;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Bomb {
+public abstract class CustomBomb {
    @Getter @Setter
    private Player thrower;
 
@@ -31,10 +31,13 @@ public abstract class Bomb {
    @Getter @Setter
    private boolean activated = false;
 
+    @Getter @Setter
+    private List<Location> particleLocations = new ArrayList<>();
+
    @Getter @Setter
     private List<Player> affectedPlayers = new ArrayList<>();
 
-    public Bomb(Player thrower, Item bomb) {
+    public CustomBomb(Player thrower, Item bomb) {
         this.thrower = thrower;
         this.bomb = bomb;
     }
@@ -46,6 +49,10 @@ public abstract class Bomb {
 
     public abstract boolean isAffected(final Player player);
     public abstract boolean mustBeAffected(final Player player);
+
+    public abstract void onActivation();
+
+    public abstract void update();
 
 
     public boolean isExpired() {

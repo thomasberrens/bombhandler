@@ -6,13 +6,15 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 
-public class BleedBomb extends Bomb{
+public class BleedCustomBomb extends CustomBomb {
 
-    public BleedBomb(Player thrower, Item bomb) {
+    public BleedCustomBomb(Player thrower, Item bomb) {
         super(thrower, bomb);
 
         setParticleEffect(Effect.WITCH_MAGIC);
     }
+
+
 
     @Override
     public void affectPlayer(Player player) {
@@ -41,5 +43,15 @@ public class BleedBomb extends Bomb{
         final boolean isInTheSameFaction = false;
 
         return !isInTheSameFaction;
+    }
+
+    @Override
+    public void onActivation() {
+
+    }
+
+    @Override
+    public void update() {
+
     }
 }

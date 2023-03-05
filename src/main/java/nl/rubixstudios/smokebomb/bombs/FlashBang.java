@@ -8,7 +8,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class FlashBang extends Bomb{
+public class FlashBang extends CustomBomb {
     public FlashBang(Player thrower, Item bomb) {
         super(thrower, bomb);
 
@@ -20,6 +20,7 @@ public class FlashBang extends Bomb{
         player.setMetadata("flashbang", new FixedMetadataValue(nl.rubixstudios.smokebomb.Bomb.getInstance(), true));
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) getDuration() * 20, 5));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int) getDuration() * 20, 5));
         Bukkit.broadcastMessage("AFFECT: " + player.getName());
         addAffectedPlayer(player);
     }
@@ -29,6 +30,7 @@ public class FlashBang extends Bomb{
         player.removeMetadata("flashbang", nl.rubixstudios.smokebomb.Bomb.getInstance());
 
         player.removePotionEffect(PotionEffectType.BLINDNESS);
+        player.removePotionEffect(PotionEffectType.CONFUSION);
 
         removeAffectedPlayer(player);
     }
@@ -44,5 +46,15 @@ public class FlashBang extends Bomb{
         final boolean isInTheSameFaction = false;
 
         return !isInTheSameFaction;
+    }
+
+    @Override
+    public void onActivation() {
+
+    }
+
+    @Override
+    public void update() {
+
     }
 }

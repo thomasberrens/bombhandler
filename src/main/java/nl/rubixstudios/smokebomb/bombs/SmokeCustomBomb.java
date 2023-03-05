@@ -1,38 +1,35 @@
 package nl.rubixstudios.smokebomb.bombs;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
+import nl.rubixstudios.smokebomb.BombManager;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SmokeBomb extends Bomb{
-    public SmokeBomb(Player thrower, Item bomb) {
+public class SmokeCustomBomb extends CustomBomb {
+    public SmokeCustomBomb(Player thrower, Item bomb) {
         super(thrower, bomb);
 
         setParticleEffect(Effect.LARGE_SMOKE);
     }
 
+    private long lastParticleUpdate = 0;
+
+    private Location startLocation;
+
+
     @Override
     public void affectPlayer(Player player) {
 
-        player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(6 * 20, 1));
+        player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect((int) (this.getDuration() * 20), 1));
         updateArmor(player, true);
 
         Bukkit.broadcastMessage("AFFECT: " + player.getName());
@@ -95,5 +92,24 @@ public class SmokeBomb extends Bomb{
         final boolean isInTheSameFaction = false;
 
         return !isInTheSameFaction;
+    }
+
+    @Override
+    public void onActivation() {
+        lastParticleUpdate = getActivateTime();
+        startLocation = getBomb().getLocation();
+    }
+
+    @Override
+    public void update() {
+
+        if (!isActivated()) return;
+
+        if (System.currentTimeMillis() - lastParticleUpdate > 1.35 * 1000) {
+            lastParticleUpdate = System.currentTimeMillis();
+
+            BombManager.getInstance().spawnParticles(this);
+            Bukkit.broadcastMessage("Spawning particles");
+        }
     }
 }

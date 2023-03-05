@@ -1,14 +1,10 @@
 package nl.rubixstudios.smokebomb;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketListener;
 import lombok.Getter;
-import nl.rubixstudios.smokebomb.bombs.BleedBomb;
+import nl.rubixstudios.smokebomb.bombs.BleedCustomBomb;
 import nl.rubixstudios.smokebomb.bombs.FlashBang;
-import nl.rubixstudios.smokebomb.bombs.SmokeBomb;
+import nl.rubixstudios.smokebomb.bombs.SmokeCustomBomb;
 import nl.rubixstudios.smokebomb.listener.OnDamageListener;
-import nl.rubixstudios.smokebomb.packetlistener.MyPacketListener;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -29,8 +25,6 @@ public final class Bomb extends JavaPlugin implements Listener {
     public void onEnable() {
         // Plugin startup logic
         instance = this;
-
-        MyPacketListener packetListener = new MyPacketListener();
 
         // Register events
         getServer().getPluginManager().registerEvents(this, this);
@@ -66,7 +60,7 @@ public final class Bomb extends JavaPlugin implements Listener {
 
             event.getPlayer().updateInventory();
             event.setCancelled(true);
-            BombManager.getInstance().addBomb(new SmokeBomb(event.getPlayer(), bomb));
+            BombManager.getInstance().addBomb(new SmokeCustomBomb(event.getPlayer(), bomb));
 
         }
 
@@ -82,7 +76,7 @@ public final class Bomb extends JavaPlugin implements Listener {
 
             event.getPlayer().updateInventory();
             event.setCancelled(true);
-            BombManager.getInstance().addBomb(new BleedBomb(event.getPlayer(), bomb));
+            BombManager.getInstance().addBomb(new BleedCustomBomb(event.getPlayer(), bomb));
         }
 
         if (event.getItem().getType().equals(Material.FIREWORK)) {
