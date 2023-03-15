@@ -67,6 +67,8 @@ public class BombManager {
 
 
                         BombManager.getInstance().getCustomBombs().remove(customBomb);
+
+                        customBomb.getBomb().remove();
                     }
                 });
             }
