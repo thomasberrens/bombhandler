@@ -1,6 +1,21 @@
-name: SmokeBomb
+name: Bomb
 version: '${project.version}'
-main: nl.rubixstudios.smokebomb.Bomb
+main: nl.rubixstudios.bombplugin.Bomb
 authors: [ Tokeee ]
+
+commands:
+  givebomb:
+    description: Get a bomb
+    usage: /givebomb <bomb>
+    aliases: [gb]
+    permission: bomb.give
+
+  listbombs:
+    description: List all bombs
+    usage: /listbombs
+    aliases: [lb]
+    permission: bomb.list
+
 depend:
   - ProtocolLib
+  - Lazarus

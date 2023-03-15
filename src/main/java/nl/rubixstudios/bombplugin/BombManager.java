@@ -1,9 +1,9 @@
-package nl.rubixstudios.smokebomb;
+package nl.rubixstudios.bombplugin;
 
 import lombok.Getter;
-import nl.rubixstudios.smokebomb.bombs.CustomBomb;
-import org.bukkit.Bukkit;
+import nl.rubixstudios.bombplugin.bombs.CustomBomb;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -17,6 +17,7 @@ public class BombManager {
 
     @Getter
     private final List<CustomBomb> customBombs = new ArrayList<>();
+
 
     public BombManager() {
         instance = this;
@@ -61,7 +62,6 @@ public class BombManager {
 
 
                     if (lerpTime >= 1) {
-                        Bukkit.broadcastMessage("Stop");
 
                         new ArrayList<>(customBomb.getAffectedPlayers()).forEach(customBomb::removeEffect);
 
@@ -73,45 +73,26 @@ public class BombManager {
         };
     }
 
-    public void initializeParticleLocations(CustomBomb customBomb){
-        final Location center = customBomb.getBomb().getLocation();
-        int numLayers = 16;
-        double radius = customBomb.getRadius() + 2;
+    public void initializeParticleLocations(CustomBomb customBomb) {
+        final World world = customBomb.getBomb().getWorld();
+        final Location dropLoc = customBomb.getBomb().getLocation();
 
-        int numParticles = 24;  // Number of particles per layer
-        double deltaTheta = Math.PI * 2 / numParticles;
+        final float maxRadius = customBomb.getRadius();
 
+        // Calculate the step to ensure a 1-block gap between layers
+        double step = Math.asin(1.0 / maxRadius);
 
+        for (double theta = 0; theta <= Math.PI; theta += step) {
+            double radius = maxRadius * Math.sin(theta);
+            double y = dropLoc.getY() + (maxRadius * Math.cos(theta));
 
-        double peakHeight = center.getY() + numLayers;
-        double peakDensity = numParticles * 3;
+            for (double phi = 0; phi < 2 * Math.PI; phi += step) {
+                double x = dropLoc.getX() + (radius * Math.cos(phi));
+                double z = dropLoc.getZ() + (radius * Math.sin(phi));
 
-        for (int i = 0; i < numLayers; i++) {
-            double layerHeight = center.getY() + (double) i;
-            double layerRadius = radius * (1.0 - (double) i / numLayers);
-            for (int j = 0; j < numParticles; j++) {
-                double theta = j * deltaTheta;
-                double phi = Math.PI * i / numLayers;
-                double x = layerRadius * Math.sin(phi) * Math.cos(theta);
-                double y = layerRadius * Math.cos(phi);
-                double z = layerRadius * Math.sin(phi) * Math.sin(theta);
-                Location particleLoc = center.clone().add(x, y, z);
-
-                System.out.println("Spawned particle at " + particleLoc.getX() + "," + particleLoc.getY() + "," + particleLoc.getZ());
-
-                //    particleLoc.getWorld().spigot().playEffect(particleLoc, bomb.getParticleEffect(), 0, 0, 0, 0, 0, 0, 6, 16);
+                Location particleLoc = new Location(world, x, y, z);
 
                 customBomb.getParticleLocations().add(particleLoc);
-
-                if (j % (numParticles / 4) == 0) { // Spawn additional particles in between
-                    double x2 = layerRadius * Math.sin(phi) * Math.cos(theta + deltaTheta / 2);
-                    double y2 = layerRadius * Math.cos(phi);
-                    double z2 = layerRadius * Math.sin(phi) * Math.sin(theta + deltaTheta / 2);
-                    Location particleLoc2 = center.clone().add(x2, y2, z2);
-                    //    particleLoc2.getWorld().spigot().playEffect(particleLoc2, bomb.getParticleEffect(), 0, 0, 0, 0, 0, 0, 6, 16);
-                    customBomb.getParticleLocations().add(particleLoc2);
-                }
-
             }
         }
     }
@@ -134,7 +115,6 @@ public class BombManager {
 
 
     }
-
 
     // getter for instance
     public static BombManager getInstance() {

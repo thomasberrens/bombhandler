@@ -1,4 +1,4 @@
-package nl.rubixstudios.smokebomb.util;
+package nl.rubixstudios.bombplugin.util;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;

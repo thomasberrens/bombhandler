@@ -1,4 +1,4 @@
-package nl.rubixstudios.smokebomb.bombs;
+package nl.rubixstudios.bombplugin.bombs;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,13 +14,13 @@ public abstract class CustomBomb {
    @Getter @Setter
    private Player thrower;
 
-   @Getter
-   private final float duration = 5f;
+   @Getter @Setter
+   private float duration = 5f;
 
    @Getter
    private final Item bomb;
 
-   @Getter private final float radius = 8f;
+   @Getter @Setter private float radius = 8f;
 
    @Getter @Setter
    private Effect particleEffect;
@@ -53,6 +53,8 @@ public abstract class CustomBomb {
     public abstract void onActivation();
 
     public abstract void update();
+
+    public abstract BombType getType();
 
 
     public boolean isExpired() {

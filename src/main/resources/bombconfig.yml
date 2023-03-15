@@ -1,0 +1,34 @@
+# Permissions:
+# - bomb.list - Allows the player to list all bombs
+# - bomb.give - Allows the player to give bombs to other players
+
+bombs:
+  FLASH_BANG:
+    duration: 5
+    radius: 5
+    abilityCooldown: 20
+    itemStack:
+      material: FIREWORK
+      name: '&aFlash Bang'
+      lore:
+        - '&7Throw this to block your enemies vision'
+  SMOKE_BOMB:
+    duration: 5
+    radius: 5
+    abilityCooldown: 20
+    itemStack:
+      material: FIREBALL
+      name: '&6Smoke Bomb'
+      lore:
+        - '&7Throw this to create a smoke screen'
+        - '&7that will block your enemies vision'
+  BLEED_BOMB:
+    duration: 5
+    radius: 5
+    damageAmplifier: 1.5
+    abilityCooldown: 20
+    itemStack:
+      material: BLAZE_ROD
+      name: '&cBleed Bomb'
+      lore:
+        - '&7Throw this to deal extra damage on your enemies.'
